@@ -1,0 +1,19 @@
+[project]
+name = "ytmon-tests"
+version = "0.1.0"
+description = "Test suite for nightswatch/ytmon"
+requires-python = ">=3.10"
+dependencies = [
+    "pytest>=7.0",
+    "pyyaml>=6.0",
+]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+python_files = ["test_*.py"]
+python_functions = ["test_*"]
+addopts = "-v"
+
+[tool.ruff]
+line-length = 88
+target-version = "py310"
