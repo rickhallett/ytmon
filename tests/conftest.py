@@ -100,3 +100,57 @@ fi
     monkeypatch.setenv("PATH", new_path)
     
     return mock_script
+
+
+@pytest.fixture
+def mock_ytmon(tmp_path):
+    """
+    Mock ytmon for testing grab command without network calls.
+    Returns a successful transcript fetch.
+    """
+    mock_dir = tmp_path / "mock_ytmon"
+    mock_dir.mkdir(exist_ok=True)
+    mock_script = mock_dir / "ytmon"
+    mock_script.write_text('''#!/bin/bash
+# Mock ytmon for testing grab command
+echo "Mock transcript fetched successfully"
+echo "00:00 Hello world"
+echo "00:05 This is a mock transcript"
+exit 0
+''')
+    mock_script.chmod(0o755)
+    return mock_script
+
+
+@pytest.fixture
+def mock_ytmon_fail(tmp_path):
+    """
+    Mock ytmon that fails (simulates invalid URL or no transcript).
+    """
+    mock_dir = tmp_path / "mock_ytmon_fail"
+    mock_dir.mkdir(exist_ok=True)
+    mock_script = mock_dir / "ytmon"
+    mock_script.write_text('''#!/bin/bash
+# Mock ytmon that fails
+echo "Error: Could not fetch transcript" >&2
+exit 1
+''')
+    mock_script.chmod(0o755)
+    return mock_script
+
+
+@pytest.fixture
+def mock_ytmon_echo_url(tmp_path):
+    """
+    Mock ytmon that echoes the URL it receives (for testing URL passthrough).
+    """
+    mock_dir = tmp_path / "mock_ytmon_echo"
+    mock_dir.mkdir(exist_ok=True)
+    mock_script = mock_dir / "ytmon"
+    mock_script.write_text('''#!/bin/bash
+# Mock ytmon that echoes args
+echo "Received URL: $2"
+exit 0
+''')
+    mock_script.chmod(0o755)
+    return mock_script
